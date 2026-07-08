@@ -1,0 +1,18 @@
+{
+  "NQ (Nasdaq-100)": {
+    "buyhold_maxdd_pct": -50.1,
+    "v11_maxdd_pct": -22.1
+  },
+  "S&P 500 (proxy, 1962+)": {
+    "buyhold_maxdd_pct": -52.6,
+    "v11_maxdd_pct": -29.1
+  },
+  "HY credit": {
+    "buyhold_maxdd_pct": -30.2,
+    "v11_maxdd_pct": -8.1
+  },
+  "Bitcoin": {
+    "buyhold_maxdd_pct": -75.4,
+    "v11_maxdd_pct": -50.1
+  }
+}

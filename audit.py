@@ -1,6 +1,6 @@
-"""THE ELEPHANT INDEX VERIFIER — canonical public audit ("Don't Trust, Verify").
+"""THE ELEPHANT VERIFIER — canonical public audit ("Don't Trust, Verify").
 
-Run this yourself. It reproduces every claim on the Elephant Index "How It Works" page using only
+Run this yourself. It reproduces every claim on the BanksKnow "How It Works" page using only
 public data + the signal's published ON/OFF dates (its OUTPUT, never its recipe). If our claim
 is data-mining, these tests fail. They don't.
 
@@ -11,8 +11,8 @@ is data-mining, these tests fail. They don't.
   - it survives removing any single crisis          (i.e. the recipe — you don't need to trust it,
   - the naive public version underperforms            because you've proven it isn't luck or fitting)
 
-Data: ./data/*.csv (regime dates + public price/return series, through the latest complete month) and
-data/net_liquidity.csv (FRED WALCL-RRP-TGA). Regenerate the inputs yourself from FRED + Yahoo if you
+Data: docs/.../audit/data/*.csv (regime dates + public returns, through the latest complete month (D-068)) and
+net_liquidity.csv (FRED WALCL-RRP-TGA). Regenerate inputs yourself from FRED + Yahoo if you
 prefer not to trust the shipped CSVs — that is the point.
 
 Run:  python audit.py        (needs: numpy, pandas, scipy)
@@ -58,10 +58,34 @@ def stratof(on, fwd, rf):
 
 
 # ---- load ----
+# NQ1 + BTC ship FRED public-domain prices. SPX_proxy + HYG ship regime DATES + rf only; this
+# audit FETCHES their prices at runtime (S&P/HYG vendors bar redistribution) — you reproduce
+# those two legs on data you pull yourself.
+FETCH = {"SPX_proxy": ("^GSPC", "Close"), "HYG": ("HYG", "Adj Close")}
+
+
+def _fetch_monthly(key):
+    import yfinance as yf
+    ticker, field = FETCH[key]
+    df = yf.download(ticker, start="1960-01-01", progress=False, auto_adjust=False)
+    col = df[field]; s = col.iloc[:, 0] if hasattr(col, "columns") else col
+    m = s.resample("ME").last(); m.index = m.index.to_period("M")
+    return m.dropna()
+
+
 def load(key):
-    d = pd.read_csv(f"{DATA}/regime_{key}.csv")
+    if key in ("NQ1", "BTC"):
+        d = pd.read_csv(f"{DATA}/regime_{key}.csv")
+        d["period"] = pd.PeriodIndex(d["period"], freq="M")
+        return d.set_index("period")
+    d = pd.read_csv(f"{DATA}/regime_{key}_dates.csv")
     d["period"] = pd.PeriodIndex(d["period"], freq="M")
-    return d.set_index("period")
+    d = d.set_index("period")
+    px = _fetch_monthly(key)
+    d["price"] = px.reindex(d.index)
+    d = d.dropna(subset=["price"])
+    d["fwd_ret_tr"] = d["price"].shift(-1) / d["price"] - 1
+    return d.dropna(subset=["fwd_ret_tr"])
 
 
 def net_liq():
@@ -120,7 +144,7 @@ def main():
     panels = {k: load(k) for k in LABELS}
     liq = net_liq()
     line = "=" * 78
-    print(line + "\nTHE ELEPHANT INDEX VERIFIER — canonical public audit\n" + line)
+    print(line + "\nTHE ELEPHANT VERIFIER — canonical public audit\n" + line)
 
     # ---------- 1. THE TIDE (lagged, two-speed) ----------
     print("\n[1] THE TIDE IS REAL BUT LAGGED — corr(net-liq 3m growth at t-k, asset return at t)")
