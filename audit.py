@@ -1,4 +1,4 @@
-"""THE ELEPHANT VERIFIER — canonical public audit ("Don't Trust, Verify").
+"""THE ELEPHANT INDEX VERIFIER — canonical public audit ("Don't Trust, Verify").
 
 Run this yourself. It reproduces every claim on the Elephant Index "How It Works" page using only
 public data + the signal's published ON/OFF dates (its OUTPUT, never its recipe). If our claim
@@ -120,7 +120,7 @@ def main():
     panels = {k: load(k) for k in LABELS}
     liq = net_liq()
     line = "=" * 78
-    print(line + "\nTHE ELEPHANT VERIFIER — canonical public audit\n" + line)
+    print(line + "\nTHE ELEPHANT INDEX VERIFIER — canonical public audit\n" + line)
 
     # ---------- 1. THE TIDE (lagged, two-speed) ----------
     print("\n[1] THE TIDE IS REAL BUT LAGGED — corr(net-liq 3m growth at t-k, asset return at t)")

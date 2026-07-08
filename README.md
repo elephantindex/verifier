@@ -1,4 +1,4 @@
-# The Elephant Verifier
+# The Elephant Index Verifier
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elephantindex/verifier/blob/main/audit.ipynb)
 
