@@ -26,7 +26,7 @@ python audit.py
    - *cherry-picking* → holds out-of-sample across the S&P-500 proxy (1962+), high-yield credit,
      and Bitcoin — none of them used to build it;
    - *luck* → matched-random permutation (10,000 shuffles), Fisher-combined **p ≈ 0.0001 (return) /
-     0.00004 (drawdown)**;
+     0.00003 (drawdown)**;
    - *parameter fishing* → Deflated Sharpe (Bailey–López de Prado) clears the haircut on Bitcoin
      (≈0.99) and credit (≈0.90);
    - *one lucky crisis* → leave-one-crisis-out: drop 1973-74 / 2008 / 2020 / 2022 — result
@@ -56,6 +56,27 @@ Everything here is an **output or public market data** — never an input to the
 Don't want to trust the shipped CSVs? Re-pull the inputs yourself — net liquidity and the index/BTC
 prices from **FRED**, the ETF total return from **Yahoo** — and re-run. That is the whole point.
 
+## The live feed & the 5-month embargo (`live/`)
+
+| file | contents |
+|---|---|
+| `live/signal_current.json` | the latest **published** regime state (see embargo below) |
+| `live/signal_history.csv` | full monthly regime history through the published cutoff |
+| `live/decision_hashes.csv` | **commit-reveal ledger** — every month-end decision's salted SHA-256, published immediately; nonce + plaintext revealed once the month clears the embargo |
+
+**The regime plaintext is published with a 5-month delay.** Subscribers receive each decision at
+month-end; the public record trails it. Two things keep this honest:
+
+1. **Every call is timestamped when made.** The decision hash publishes the day of the decision —
+   `SHA-256("<ASSET>:<REGIME>:<since>|...|as_of:<YYYY-MM>|nonce:<hex>")` — and the nonce + plaintext
+   are revealed when the month ages out. You can verify every reveal against its pre-published hash.
+2. **Free-riding the delayed feed is worthless — verify that yourself:** `python freerider.py`
+   computes, on this repo's own data, what copying the published regime N months late gets you.
+   Answer: on the Nasdaq-100, the 5-month-late copier takes buy-and-hold's full drawdown with *less*
+   return than buy-and-hold; on Bitcoin the copy is dead by ~3 months (buy-and-hold results with
+   extra steps, forgoing 20pp+/yr vs acting on time). The delayed feed is a **track record**, not a
+   trading signal — by construction, not by promise.
+
 ## Reproducibility note (for anyone rebuilding net liquidity)
 
 `RRPONTSYD` has prints in only a minority of months before 2013 — ON-RRP operations were sporadic
@@ -66,5 +87,5 @@ Reindex RRP and TGA onto WALCL's dates and fill missing values with 0.
 ## Notes
 
 - Figures are **hypothetical / backtested** and not indicative of future results; not investment advice.
-- The full history through the latest complete month is published; the current in-progress month's
-  state comes from the live signal feed.
+- All regime data in this repo (`data/` and `live/`) is published through the same 5-month cutoff —
+  the audit CSVs and the live feed trail together, refreshed monthly.

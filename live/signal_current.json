@@ -1,0 +1,18 @@
+{
+  "as_of": "2026-02",
+  "embargo_months": 5,
+  "note": "Regime history is published with a 5-month delay. Each month-end decision's salted SHA-256 publishes immediately in decision_hashes.csv and is revealed (nonce + plaintext) when the month clears the embargo \u2014 every call is publicly timestamped when made, tradeable only by subscribers.",
+  "source": "FRED (fredgraph.csv, no key)",
+  "assets": {
+    "NQ": {
+      "regime": "ON",
+      "since": "2025-06",
+      "price": 24960.04
+    },
+    "BTC": {
+      "regime": "OFF",
+      "since": "2025-12",
+      "price": 66680.36
+    }
+  }
+}
