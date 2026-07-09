@@ -58,10 +58,30 @@ def stratof(on, fwd, rf):
 
 
 # ---- load ----
+FETCH = {"SPX_proxy": ("^GSPC", "Close"), "HYG": ("HYG", "Adj Close")}
+
+
+def _fetch_monthly(key):
+    import yfinance as yf
+    ticker, field = FETCH[key]
+    df = yf.download(ticker, start="1960-01-01", progress=False, auto_adjust=False)
+    col = df[field]; s = col.iloc[:, 0] if hasattr(col, "columns") else col
+    m = s.resample("ME").last(); m.index = m.index.to_period("M")
+    return m.dropna()
+
+
 def load(key):
-    d = pd.read_csv(f"{DATA}/regime_{key}.csv")
+    if key in ("NQ1", "BTC"):                      # shipped with FRED public-domain price
+        d = pd.read_csv(f"{DATA}/regime_{key}.csv")
+        d["period"] = pd.PeriodIndex(d["period"], freq="M")
+        return d.set_index("period")
+    d = pd.read_csv(f"{DATA}/regime_{key}_dates.csv")   # SPX_proxy / HYG: dates + rf only
     d["period"] = pd.PeriodIndex(d["period"], freq="M")
-    return d.set_index("period")
+    d = d.set_index("period")
+    d["price"] = _fetch_monthly(key).reindex(d.index)
+    d = d.dropna(subset=["price"])
+    d["fwd_ret_tr"] = d["price"].shift(-1) / d["price"] - 1
+    return d.dropna(subset=["fwd_ret_tr"])
 
 
 def net_liq():

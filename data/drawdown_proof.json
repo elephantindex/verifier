@@ -1,0 +1,112 @@
+{
+  "generated": "2026-07-08",
+  "note": "Computed results (publishable). Raw vendor price series are NOT redistributed; run audit.py to reproduce these on data you fetch yourself. NQ from FRED NASDAQ100; S&P/credit price fetched at runtime by the audit.",
+  "headline": "Calmar (return per unit of drawdown) roughly doubles on every asset; on the Nasdaq it is the same return at half the drawdown.",
+  "assets": [
+    {
+      "key": "NQ1",
+      "label": "Nasdaq-100",
+      "class": "equity",
+      "era": "2003+",
+      "span": "2003-01..2026-02",
+      "buy_hold": {
+        "cagr": 0.1467,
+        "sharpe": 0.77,
+        "maxdd": -0.5011,
+        "calmar": 0.29,
+        "maxdd_trough": "2009-01"
+      },
+      "v11": {
+        "cagr": 0.1472,
+        "sharpe": 0.91,
+        "maxdd": -0.2205,
+        "calmar": 0.67,
+        "maxdd_trough": "2008-01"
+      }
+    },
+    {
+      "key": "SPX_proxy",
+      "label": "S&P 500 (proxy)",
+      "class": "equity",
+      "era": "1962+",
+      "span": "1962-02..2026-02",
+      "buy_hold": {
+        "cagr": 0.0733,
+        "sharpe": 0.25,
+        "maxdd": -0.5256,
+        "calmar": 0.14,
+        "maxdd_trough": "2009-01"
+      },
+      "v11": {
+        "cagr": 0.0867,
+        "sharpe": 0.4,
+        "maxdd": -0.2908,
+        "calmar": 0.3,
+        "maxdd_trough": "2002-08"
+      }
+    },
+    {
+      "key": "HYG",
+      "label": "HY credit",
+      "class": "credit",
+      "era": "2007+",
+      "span": "2007-04..2026-02",
+      "buy_hold": {
+        "cagr": 0.0484,
+        "sharpe": 0.37,
+        "maxdd": -0.3024,
+        "calmar": 0.16,
+        "maxdd_trough": "2008-10"
+      },
+      "v11": {
+        "cagr": 0.0529,
+        "sharpe": 0.74,
+        "maxdd": -0.0809,
+        "calmar": 0.65,
+        "maxdd_trough": "2011-08"
+      }
+    },
+    {
+      "key": "BTC",
+      "label": "Bitcoin",
+      "class": "crypto",
+      "era": "2016+ (perps era)",
+      "span": "2016-01..2026-02",
+      "buy_hold": {
+        "cagr": 0.6709,
+        "sharpe": 1.02,
+        "maxdd": -0.7541,
+        "calmar": 0.89,
+        "maxdd_trough": "2018-12"
+      },
+      "v11": {
+        "cagr": 0.8983,
+        "sharpe": 1.27,
+        "maxdd": -0.5008,
+        "calmar": 1.79,
+        "maxdd_trough": "2018-02"
+      }
+    },
+    {
+      "key": "BTC",
+      "label": "Bitcoin",
+      "class": "crypto",
+      "era": "2020+ (ETF era)",
+      "span": "2020-01..2026-02",
+      "buy_hold": {
+        "cagr": 0.3804,
+        "sharpe": 0.77,
+        "maxdd": -0.7306,
+        "calmar": 0.52,
+        "maxdd_trough": "2022-11"
+      },
+      "v11": {
+        "cagr": 0.6234,
+        "sharpe": 1.12,
+        "maxdd": -0.404,
+        "calmar": 1.54,
+        "maxdd_trough": "2021-05"
+      }
+    }
+  ]
+}
