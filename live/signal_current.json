@@ -5,13 +5,15 @@
   "source": "FRED (fredgraph.csv, no key)",
   "assets": {
     "NQ": {
+      "position": 100,
+      "since": "2025-06",
       "regime": "ON",
-      "since": "2026-05",
       "price": 30333.18
     },
     "BTC": {
-      "regime": "OFF",
+      "position": 0,
       "since": "2025-12",
+      "regime": "OFF",
       "price": 73688.35
     }
   }
