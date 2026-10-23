@@ -38,7 +38,7 @@ python audit.py
 ## What stays locked (and why that's fine)
 
 You verify the signal isn't luck or curve-fitting **without** seeing *which* series, the curve/exit
-mechanics, the stress gate, the thresholds, or the consensus logic. A crude public rebuild of the
+parameters, the stress-gate definition, the thresholds, or the consensus logic. A crude public rebuild of the
 logic caps far below the real signal — so the recipe stays a recipe, and you still didn't have to
 trust it.
 
