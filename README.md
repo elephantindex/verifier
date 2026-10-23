@@ -48,7 +48,7 @@ Everything here is an **output or public market data** — never an input to the
 
 | file | contents | source |
 |---|---|---|
-| `regime_NQ1.csv`, `regime_BTC.csv` | published regime ON/OFF dates + **price return** | Nasdaq-100 & Bitcoin closes (FRED) |
+| `regime_NQ1.csv`, `regime_BTC.csv` | the research regime's ON/OFF dates (the rule this audit was built and reviewed on) + **price return** | Nasdaq-100 & Bitcoin closes (FRED) |
 | `regime_SPX_proxy.csv` | regime dates + **price return**, back to 1962 | S&P 500 price series (public, re-derivable) |
 | `regime_HYG.csv` | regime dates + **total return** | HYG ETF dividend-adjusted close (Yahoo) |
 | `net_liquidity.csv` | net liquidity = WALCL − RRP − TGA, monthly | FRED |
@@ -60,9 +60,25 @@ prices from **FRED**, the ETF total return from **Yahoo** — and re-run. That i
 
 | file | contents |
 |---|---|
-| `live/signal_current.json` | the latest **published** regime state (see embargo below) |
-| `live/signal_history.csv` | full monthly regime history through the published cutoff |
+| `live/signal_current.json` | the latest **published** state, as of the cutoff month: per asset `position`, `since`, and `regime` (`"ON"` = any exposure; kept for older readers) |
+| `live/signal_history.csv` | monthly **position** history through the published cutoff (`nq_position`, `btc_position`, with prices) |
+| `live/nq_history.csv`, `live/btc_history.csv` | the same history, one file per asset: `date,price,position` |
 | `live/decision_hashes.csv` | **commit-reveal ledger** — every month-end decision's salted SHA-256, published immediately; nonce + plaintext revealed once the month clears the embargo |
+
+**What a position means.** The share of the asset the Index holds **during** that month, decided at
+the previous month-end close. Nasdaq-100: **0, 50 or 100** (the two votes; one vote = 50). Bitcoin:
+**0 or 100** (consensus — on a split vote it keeps its previous position). The history starts when all
+inputs exist: Nasdaq February 2003, Bitcoin January 2015. It is computed by the same engine and FRED
+data as the live Index (Nasdaq-100 cash index); the fund research series use Nasdaq futures prices and
+differ from it in the 2003 warm-up and in two months (Dec 2012, Jan 2013), where the index closed 0.01%
+below its 10-month average and the futures just above.
+
+**Correction (2026-10-23).** Until this date the `live/` history published the predecessor rule, and
+before 2014 a data bug froze it: months with no reverse-repo operations were dropped from net
+liquidity instead of counted as $0 (see the reproducibility note below), so the rule held its previous
+state — for example ON through the 2008 crash. The bug is fixed and the `live/` files now carry the
+live Index's own positions. The live signal and every sealed hash were unaffected (all inputs exist
+from 2014 on).
 
 **The regime plaintext is published with a 5-month delay.** Subscribers receive each decision at
 month-end; the public record trails it. Two things keep this honest:
@@ -82,10 +98,12 @@ month-end; the public record trails it. Two things keep this honest:
 `RRPONTSYD` has prints in only a minority of months before 2013 — ON-RRP operations were sporadic
 then, so **no print means $0 outstanding, not missing data**. If you rebuild net liquidity by
 intersecting the three component series, those months become blank and the pre-2013 history breaks.
-Reindex RRP and TGA onto WALCL's dates and fill missing values with 0.
+Reindex RRP and TGA onto WALCL's months: fill a missing RRP month with 0, and carry TGA's last value
+over its rare missing month. This reproduces `data/net_liquidity.csv` exactly.
 
 ## Notes
 
 - Figures are **hypothetical / backtested** and not indicative of future results; not investment advice.
-- All regime data in this repo (`data/` and `live/`) is published through the same 5-month cutoff —
-  the audit CSVs and the live feed trail together, refreshed monthly.
+- `live/` is refreshed monthly through the 5-month cutoff. The audit inputs in `data/` are a fixed
+  snapshot through 2026-02, on the research regime (see the table above) — a different rule from the
+  live positions in `live/`, so the two are not expected to match month for month.
