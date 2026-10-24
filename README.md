@@ -63,6 +63,7 @@ prices from **FRED**, the ETF total return from **Yahoo** — and re-run. That i
 | `live/signal_current.json` | the latest **published** state, as of the cutoff month: per asset `position`, `since`, and `regime` (`"ON"` = any exposure; kept for older readers) |
 | `live/signal_history.csv` | monthly **position** history through the published cutoff (`nq_position`, `btc_position`, with prices) |
 | `live/nq_history.csv`, `live/btc_history.csv` | the same history, one file per asset: `date,price,position` |
+| `live/inputs_monthly.csv` | the sampled monthly inputs behind every published position (Rulebook §2), in FRED units, through the month before the embargo cutoff. Rebuild the Index from this file alone and you reproduce every published position. |
 | `live/decision_hashes.csv` | **commit-reveal ledger** — every month-end decision's salted SHA-256, published immediately; nonce + plaintext revealed once the month clears the embargo |
 
 **What a position means.** The share of the asset the Index holds **during** that month, decided at
