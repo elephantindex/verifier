@@ -45,7 +45,7 @@ hashed when it is made and revealed later, so no one can claim the record was ed
 
 ## Data & provenance (`data/`)
 
-Everything here is an **output or public market data** — never an input to the recipe.
+Everything here is an **output or public market data** — never an input to the Index.
 
 | file | contents | source |
 |---|---|---|
