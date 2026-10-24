@@ -4,7 +4,8 @@
 
 > **Don't trust. Verify.** This is the canonical, reproducible audit behind the Elephant
 > Index "How It Works" page. It proves the signal is real and not data-mined — using only
-> public data and the signal's published ON/OFF dates — **without revealing the recipe.**
+> public data and the Index's published ON/OFF dates. The rules themselves are published in the
+> Elephant Index Rulebook (Hedge Capital a.s.).
 
 ## Run it
 
@@ -35,12 +36,12 @@ python audit.py
 4. **Honest weak spot** — on calm large-caps the *risk-adjusted* edge is not significant. The proven
    edge is **drawdown** and **liquidity-sensitive assets**. A seatbelt, not an alpha machine.
 
-## What stays locked (and why that's fine)
+## What is published, and what the delay is for
 
-You verify the signal isn't luck or curve-fitting **without** seeing *which* series, the curve/exit
-parameters, the stress-gate definition, the thresholds, or the consensus logic. A crude public rebuild of the
-logic caps far below the real signal — so the recipe stays a recipe, and you still didn't have to
-trust it.
+The Rulebook publishes every rule: the inputs, the two sensors, the confirmations and the position mapping. Anyone can
+compute the current position from public FRED data, so nothing about the rule is withheld. The 5-month delay of the
+plaintext regime (below) no longer protects a recipe; its job is the **timestamp record**: each month's decision is
+hashed when it is made and revealed later, so no one can claim the record was edited afterwards.
 
 ## Data & provenance (`data/`)
 
